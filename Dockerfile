@@ -1,6 +1,8 @@
 FROM node:latest
 
-RUN npm install -g yarn
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+ENV PATH="/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:${PATH}"
+
 RUN npm install -g heroku
 
 WORKDIR /app
