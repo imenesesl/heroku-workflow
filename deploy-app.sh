@@ -9,6 +9,7 @@ APP_NAME="${GITHUB_REPOSITORY_NAME//\//-}-pr-${GITHUB_PR_NUMBER}"
 echo -e "${YELLOW}Updating Ephemeral Environment: ${APP_NAME} on ${GITHUB_WORKSPACE}${NC}"
 
 heroku auth:token
+git init
 heroku git:remote -a $APP_NAME
 
 cd $GITHUB_WORKSPACE
@@ -22,12 +23,11 @@ yarn build
 git add -A
 git commit -m "Updating Ephemeral Environment"
 
-heroku buildpacks:add heroku/nodejs
-heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static.git
 
 git push heroku HEAD:master
 
 pwd
+ls -la
 
 echo -e "${YELLOW}Ephemeral Environment Updated${NC}"
 echo -e "${GREEN}Completed.${NC}"
