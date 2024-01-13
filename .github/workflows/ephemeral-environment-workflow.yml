@@ -3,6 +3,9 @@ name: Ephemeral Environment Workflow
 on:
   workflow_call:
     inputs:
+      heroku_api_key:
+        required: true
+        type: string
       ephemeral_environment_name:
         required: true
         type: string
@@ -20,6 +23,7 @@ env:
   EPHEMERAL_ENVIRONMENT_NAME: ${{ inputs.ephemeral_environment_name }}
   GITHUB_REPOSITORY_OWNER: ${{ inputs.github_repository_owner }}
   GITHUB_REPOSITORY_NAME: ${{ inputs.github_repository_name }}
+  HEROKU_API_KEY: ${{ inputs.heroku_api_key }}
   GITHUB_PR_NUMBER: ${{ inputs.github_pr_number }}
 
 jobs:
