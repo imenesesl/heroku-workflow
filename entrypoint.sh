@@ -9,9 +9,12 @@ case "$COMMAND" in
   destroy)
     /app/destroy-app.sh
     ;;
+  deploy)
+    /app/deploy-app.sh
+    ;;
   *)
     echo "Command not found: $COMMAND"
-    echo "use 'create' or 'destroy'."
+    echo "use 'create', 'destroy' or 'deploy'"
     exit 1
     ;;
 esac
