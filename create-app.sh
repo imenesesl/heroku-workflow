@@ -4,8 +4,6 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-APP_NAME="${GITHUB_REPOSITORY_NAME//\//-}-pr-${GITHUB_PR_NUMBER}"
-
 echo -e "${YELLOW}Creation Ephemeral Environment${NC}"
 echo -e "${YELLOW}Verifying the existence of: ${APP_NAME}${NC}"
 
