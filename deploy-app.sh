@@ -12,9 +12,16 @@ heroku auth:token
 heroku git:remote -a $APP_NAME
 
 cd $GITHUB_WORKSPACE
+
+echo -e "${YELLOW}Installing dependencies${NC}"
 yarn install
+
+echo -e "${YELLOW}Building app${NC}"
 yarn build
 
 git add -A
 git commit -m "Updating Ephemeral Environment"
 git push heroku HEAD:master
+
+echo -e "${YELLOW}Ephemeral Environment Updated${NC}"
+echo -e "${GREEN}Completed.${NC}"
