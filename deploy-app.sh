@@ -20,8 +20,8 @@ echo -e "${YELLOW}Building app${NC}"
 yarn build
 
 git add -A
-git add -f dist
 git commit -m "Updating Ephemeral Environment"
+heroku buildpacks:set https://github.com/heroku/heroku-buildpack-static.git
 git push heroku HEAD:master
 
 echo -e "${YELLOW}Ephemeral Environment Updated${NC}"
