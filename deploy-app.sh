@@ -24,7 +24,7 @@ git add -A
 git commit -m "Updating Ephemeral Environment"
 
 
-git push heroku HEAD:master
+git push heroku HEAD:main
 
 pwd
 ls -la

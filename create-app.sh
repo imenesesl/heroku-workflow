@@ -14,8 +14,6 @@ if heroku apps:info $APP_NAME &> /dev/null; then
 else
     echo -e "${YELLOW}Creating new Ephemeral Environment: ${APP_NAME}${NC}"
     heroku create $APP_NAME
-    heroku buildpacks:add heroku/nodejs -a $APP_NAME
-    heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static.git -a $APP_NAME
 fi
 
 echo -e "${GREEN}Completed.${NC}"
