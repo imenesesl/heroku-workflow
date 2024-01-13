@@ -26,7 +26,7 @@ heroku buildpacks:set https://github.com/heroku/heroku-buildpack-static.git
 
 git push heroku HEAD:master
 
-heroku open
+pwd
 
 echo -e "${YELLOW}Ephemeral Environment Updated${NC}"
 echo -e "${GREEN}Completed.${NC}"
