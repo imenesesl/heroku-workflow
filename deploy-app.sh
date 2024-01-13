@@ -1,7 +1,7 @@
 #!/bin/bash
 
 heroku auth:token
-heroku git:remote -a $APP_NAME
+heroku git:remote -a $GITHUB_REPOSITORY_NAME
 
 cd $GITHUB_WORKSPACE
 yarn install
