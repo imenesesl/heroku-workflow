@@ -6,7 +6,7 @@ NC='\033[0m'
 
 APP_NAME="${GITHUB_REPOSITORY_NAME//\//-}-pr-${GITHUB_PR_NUMBER}"
 
-echo -e "${YELLOW}Updating Ephemeral Environment: ${APP_NAME} ${NC}"
+echo -e "${YELLOW}Updating Ephemeral Environment: ${APP_NAME} on ${GITHUB_WORKSPACE}${NC}"
 
 heroku auth:token
 heroku git:remote -a $APP_NAME
