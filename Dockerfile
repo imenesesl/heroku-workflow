@@ -3,7 +3,7 @@ FROM node:latest
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 ENV PATH="/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:${PATH}"
 
-RUN npm install -g heroku
+RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 WORKDIR /app
 
