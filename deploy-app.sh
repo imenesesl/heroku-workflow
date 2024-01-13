@@ -21,8 +21,12 @@ yarn build
 
 git add -A
 git commit -m "Updating Ephemeral Environment"
+
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-static.git
+
 git push heroku HEAD:master
+
+heroku open
 
 echo -e "${YELLOW}Ephemeral Environment Updated${NC}"
 echo -e "${GREEN}Completed.${NC}"
