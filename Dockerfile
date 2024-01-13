@@ -1,6 +1,6 @@
 FROM node:latest
 
-RUN npm install --global yarn
+RUN npm install -g yarn
 RUN npm install -g heroku
 
 WORKDIR /app
