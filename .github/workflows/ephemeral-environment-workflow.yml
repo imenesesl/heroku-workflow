@@ -5,7 +5,7 @@ on:
     inputs:
       heroku_api_key:
         required: true
-        type: secret
+        type: string
       ephemeral_environment_name:
         required: true
         type: string
