@@ -9,7 +9,7 @@ This repository contains several GitHub Actions workflows designed to automate d
 This workflow is triggered on workflow calls to update package.json version.
 
 #### Features:
-- Update package version using increment_type.
+- Update the package version by determining the increment type, [fix|hotfix|feature|core] using fix as default
 - Create a commit with `bump:app-package-version` to be ignored
 - Requires Personal Access Token with all repo checks and workflow check.
 
@@ -56,7 +56,6 @@ jobs:
     secrets:
       GITHUB_REPO_PAT: ${{ secrets.REPO_ACCESS }}
     with:
-      increment_type: fix
       package_json_path: "./package.json"
 ```
 
