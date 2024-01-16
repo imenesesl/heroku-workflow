@@ -1,4 +1,4 @@
-name: "Deployments"
+name: "Deployments Workflow"
 on:
   workflow_call:
     secrets:
