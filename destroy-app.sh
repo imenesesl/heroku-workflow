@@ -6,6 +6,6 @@ NC='\033[0m'
 
 echo -e "${YELLOW}Destroying Ephemeral Environment${NC}"
 
-heroku apps:destroy --app $APP_NAME --confirm $APP_NAME
+heroku apps:destroy --app $HEROKU_APP_NAME --confirm $HEROKU_APP_NAME
 
 echo -e "${GREEN}Completed.${NC}"

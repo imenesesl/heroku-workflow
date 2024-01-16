@@ -41,7 +41,7 @@ jobs:
         with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
-          APP_NAME: ${{ inputs.app_name }}
+          HEROKU_APP_NAME: ${{ inputs.app_name }}
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
           HEROKU_EMAIL: ${{inputs.heroku_email}}
   deploy-application:

@@ -5,13 +5,13 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${YELLOW}Creation Ephemeral Environment${NC}"
-echo -e "${YELLOW}Verifying the existence of: ${APP_NAME}${NC}"
+echo -e "${YELLOW}Verifying the existence of: ${HEROKU_APP_NAME}${NC}"
 
-if heroku apps:info $APP_NAME &> /dev/null; then
-    echo -e "${GREEN}Ephemeral Environment ${APP_NAME} created.${NC}"
+if heroku apps:info $HEROKU_APP_NAME &> /dev/null; then
+    echo -e "${GREEN}Ephemeral Environment ${HEROKU_APP_NAME} created.${NC}"
 else
-    echo -e "${YELLOW}Creating new Ephemeral Environment: ${APP_NAME}${NC}"
-    heroku create $APP_NAME
+    echo -e "${YELLOW}Creating new Ephemeral Environment: ${HEROKU_APP_NAME}${NC}"
+    heroku create $HEROKU_APP_NAME
 fi
 
 echo -e "${GREEN}Completed.${NC}"
