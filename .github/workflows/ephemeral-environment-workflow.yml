@@ -44,14 +44,14 @@ jobs:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
           HEROKU_APP_NAME: ${{ inputs.app_name }}
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-          HEROKU_EMAIL: ${{inputs.heroku_email}}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ inputs.heroku_email }}
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
     needs: [build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     outputs:
-      app_url: ${{env.APP_URL}}
+      app_url: ${{ env.APP_URL }}
     steps:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
@@ -76,5 +76,5 @@ jobs:
       - name: 💬 Ephemeral Environment Link
         uses: thollander/actions-comment-pull-request@v1
         with:
-          message: "🚀 Ephemeral environment link: ${{needs.deploy-application.outputs.app_url}}"
+          message: "🚀 Ephemeral environment link: ${{ needs.deploy-application.outputs.app_url }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
