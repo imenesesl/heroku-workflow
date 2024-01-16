@@ -4,14 +4,14 @@ This repository contains several GitHub Actions workflows designed to automate d
 
 ## Included Workflows
 
-### 1. Check Package Version Workflow (`check-version-workflow.yml`)
+### 1. Update Package Version Workflow (`update-version-workflow`)
 
-This workflow is triggered on workflow calls and checks if the version in `package.json` has been updated in a pull request. It compares the version between the base and head branches of the PR, ensuring that version updates accompany code changes.
+This workflow is triggered on workflow calls to update package.json version.
 
 #### Features:
-- Checks out the base and head branches of the PR.
-- Retrieves the version from `package.json` in both branches.
-- Compares the versions and fails the workflow if they are identical, indicating that the version has not been updated.
+- Update package version using increment_type.
+- Create a commit with `bump:app-package-version` to be ignored
+- Requires Personal Access Token with all repo checks and workflow check.
 
 ### 2. Deployments Workflow (`deployments-workflow.yml`)
 
@@ -38,22 +38,26 @@ Designed to manage and deploy ephemeral environments for pull requests, this wor
 
 To use these workflows in your project, you may need to make necessary adjustments to fit your specific project configuration, especially regarding secrets management, environment variables, and specific deployment settings.
 
-### 1. Check Package Version Workflow (`check-version-workflow.yml`)
+### 1. Update Package Version Workflow (`update-version-workflow`)
 
-add `.github/workflows/check-version.yml`
+add `.github/workflows/update-version.yml`
 
 ```yml
-name: Check Package Version
+name: Update Package Version
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
 
 jobs:
-  check-version-workflow:
-    uses: imenesesl/heroku-workflow/.github/workflows/check-version-workflow.yml@main
+  update-version-workflow:
+    uses: imenesesl/heroku-workflow/.github/workflows/update-version-workflow.yml@main
+    secrets:
+      GITHUB_REPO_PAT: ${{ secrets.REPO_ACCESS }}
     with:
-      command: "yarn bump:version"
+      increment_type: fix
+      package_json_path: "./package.json"
 ```
 
 ### 2. Deployments Workflow (`deployments-workflow.yml`)
@@ -146,6 +150,49 @@ jobs:
 
 5. **Save the Secret**:
    - Click the `Add secret` button to save it.
+
+## Obtaining and Storing Personal Access Token (PAT) for GitHub Actions
+
+### Prerequisites
+
+### Steps to Create a Personal Access Token (PAT)
+
+1. **Go to Your GitHub Settings**: Log in to your GitHub account. Click on your profile picture in the top right corner and select "Settings".
+
+2. **Access Developer Settings**: Scroll down to the bottom of the sidebar and click on "Developer settings".
+
+3. **Generate New Token**: In the "Developer settings" page, select "Personal access tokens", then click the "Generate new token" button.
+
+4. **Set Token Description**: Enter a description for the token in the "Note" field. For example, "CI/CD Access".
+
+5. **Select Scopes**: 
+   - Check the `repo` scope box to grant full control of private repositories. This scope includes access to code, commit statuses, repository projects, invitations, and more.
+   - Check the `workflow` scope to allow the token to run workflows.
+
+6. **Generate Token**: Click the "Generate token" button at the bottom of the page.
+
+7. **Copy the Token**: **Important!** Make sure to copy the token now. You won’t be able to see it again once you navigate away from the page.
+
+### Steps to Save the PAT as a Secret in Your Repository
+
+1. **Go to Your Repository**: Navigate to the GitHub repository where you want to add the PAT as a secret.
+
+2. **Open Repository Settings**: Click on the "Settings" tab near the top of the page.
+
+3. **Access Secrets**: In the repository settings, find and click on "Secrets" in the left sidebar.
+
+4. **Add a New Secret**: Click on the "New repository secret" button.
+
+5. **Name the Secret**: Enter a name for your secret in the "Name" field, such as `GITHUB_REPO_PAT`.
+
+6. **Paste Your Token**: In the "Value" field, paste the PAT you copied earlier.
+
+7. **Add Secret**: Click the "Add secret" button to save the PAT as a secret in your repository.
+
+### Using the PAT in GitHub Actions
+
+- In your GitHub Actions workflow file, you can now reference this secret with `${{ secrets.GITHUB_REPO_PAT }}`.
+- This allows your workflow to perform actions that require GitHub authentication, like pushing to protected branches.
 
 Now,
 
