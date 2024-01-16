@@ -10,7 +10,7 @@ case "$COMMAND" in
     /app/destroy-app.sh
     ;;
   update-version)
-    /app/destroy-app.sh
+    /app/update-version.sh
     ;;
   *)
     echo "Command not found: $COMMAND"
