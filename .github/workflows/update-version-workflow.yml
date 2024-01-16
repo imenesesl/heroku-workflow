@@ -6,9 +6,6 @@ on:
       GITHUB_REPO_PAT:
         required: true
     inputs:
-      increment_type:
-        required: true
-        type: string
       package_json_path:
         required: true
         type: string
@@ -25,13 +22,30 @@ jobs:
           ref: main
           token: ${{ secrets.GITHUB_REPO_PAT }}
 
+      - name: 🔎 Determine Increment Type
+        id: increment_type
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          PREFIX="${BRANCH_NAME%%/*}"
+          if [[ "$PREFIX" == "fix" ]]; then
+            echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
+          elif [[ "$PREFIX" == "hotfix" ]]; then
+            echo "INCREMENT_TYPE=hotfix" >> $GITHUB_ENV
+          elif [[ "$PREFIX" == "feature" ]]; then
+            echo "INCREMENT_TYPE=feature" >> $GITHUB_ENV
+          elif [[ "$PREFIX" == "core" ]]; then
+            echo "INCREMENT_TYPE=core" >> $GITHUB_ENV
+          else
+            echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
+          fi
+
       - name: 🔃 Update Package Version
         uses: imenesesl/heroku-workflow@main
         with:
           args: "update-version"
         env:
           PACKAGE_JSON_PATH: ${{ inputs.package_json_path }}
-          INCREMENT_TYPE: ${{ inputs.increment_type }}
+          INCREMENT_TYPE: ${{ env.INCREMENT_TYPE }}
 
       - name: 🆕 Commit and Push Version Update
         run: |
