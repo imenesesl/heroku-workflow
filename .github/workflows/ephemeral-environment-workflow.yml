@@ -36,6 +36,7 @@ jobs:
           IMAGE_TAG="${{ inputs.repository_owner }}/${{ inputs.repository_name }}:${{ github.sha }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $IMAGE_TAG ./docker
+
   manage-ephemeral-environment:
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +50,7 @@ jobs:
           HEROKU_APP_NAME: ${{ inputs.app_name }}
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_EMAIL: ${{ inputs.heroku_email }}
+
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
     needs: [build-docker-image, manage-ephemeral-environment]
@@ -72,6 +74,7 @@ jobs:
           echo "----------------------------------------"
           echo "🚀 Deployment URL is $APP_URL 🚀"
           echo "----------------------------------------"
+
   comment-pr:
     needs: [deploy-application]
     runs-on: ubuntu-latest
