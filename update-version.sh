@@ -12,9 +12,9 @@ currentVersion=$(grep '"version"' "$PACKAGE_JSON_PATH" | awk -F '"' '{print $4}'
 
 # Split the version into major, minor, and patch
 IFS='.' read -ra VERSION <<< "$currentVersion"
-major=${VERSION[0]}
-minor=${VERSION[1]}
-patch=${VERSION[2]}
+major=${VERSION[0]:-0}
+minor=${VERSION[1]:-0}
+patch=${VERSION[2]:-0}
 
 # Function to increment version
 increment_version() {
