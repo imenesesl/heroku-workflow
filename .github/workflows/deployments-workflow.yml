@@ -1,0 +1,42 @@
+name: "Deployments"
+on:
+  workflow_call:
+    secrets:
+      HEROKU_API_KEY:
+        required: true
+    inputs:
+      prod_app_name:
+        required: true
+        type: string
+      heroku_email:
+        required: true
+        type: string
+      stg_app_name:
+        required: true
+        type: number
+
+jobs:
+  staging-deployment:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🚀 Deploy Application to Staging
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ inputs.stg_app_name }}
+          heroku_email: ${{ inputs.heroku_email }}
+  prod-deployment:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🚀 Deploy Application to Production
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ inputs.prod_app_name }}
+          heroku_email: ${{ inputs.heroku_email }}
