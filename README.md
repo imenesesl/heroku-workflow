@@ -157,3 +157,7 @@ your GitHub Actions workflow can securely access the `HEROKU_API_KEY` secret to 
 - **Credit Card Requirement**: While Heroku offers a free tier, they require a credit card for account verification. This helps prevent fraudulent use of their services
 
 and is a standard practice for many cloud service providers. Ensure that your Heroku account is verified with a credit card to avoid any interruptions in service.
+
+## Examples
+
+### [react-vite-heroku-workflow](https://github.com/imenesesl/react-vite-heroku-workflow)
