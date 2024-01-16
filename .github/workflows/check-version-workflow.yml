@@ -1,0 +1,40 @@
+name: "Check Package Version Workflow"
+
+on:
+  workflow_call:
+    inputs:
+      command:
+        required: true
+        type: string
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔎 Checkout Base Branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: 🔗 Get Base Branch Version
+        id: base_version
+        run: echo "BASE_VERSION=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+
+      - name: 🔎 Checkout Head Branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: 🔗 Get Head Branch Version
+        id: head_version
+        run: echo "HEAD_VERSION=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+
+      - name: 🕵️ Compare Versions
+        run: |
+          if [ "$BASE_VERSION" == "$HEAD_VERSION" ]; then
+            echo "Version in package.json has not been updated."
+            echo "Please run: ${{ inputs.command }}"
+            exit 1
+          else
+            echo "Version in package.json has been updated."
+          fi
