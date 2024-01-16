@@ -3,7 +3,7 @@
 # Check if PACKAGE_JSON_PATH and INCREMENT_TYPE variables are set
 if [ -z "$PACKAGE_JSON_PATH" ] || [ -z "$INCREMENT_TYPE" ]; then
     echo "Error: PACKAGE_JSON_PATH and INCREMENT_TYPE must be set."
-    echo "Usage: export PACKAGE_JSON_PATH=path/to/package.json; export INCREMENT_TYPE=[fix|hotfix|feature|core]; $0"
+    echo "Usage: export PACKAGE_JSON_PATH=path/to/package.json; export INCREMENT_TYPE=[fix|hotfix|feature|feat|core]; $0"
     exit 1
 fi
 
@@ -20,7 +20,7 @@ patch=${VERSION[2]:-0}
 increment_version() {
     if [[ $1 == "fix" || $1 == "hotfix" ]]; then
         patch=$((patch+1))
-    elif [[ $1 == "feature" ]]; then
+    elif [[ $1 == "feature" || $1 == "feat" ]]; then
         minor=$((minor+1))
         patch=0
     elif [[ $1 == "core" ]]; then
