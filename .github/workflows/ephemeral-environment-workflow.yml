@@ -4,6 +4,8 @@ on:
     secrets:
       HEROKU_API_KEY:
         required: true
+      GITHUB_TOKEN:
+        required: true
     inputs:
       repository_owner:
         required: true
@@ -48,6 +50,8 @@ jobs:
     if: ${{ github.event.action != 'closed' }}
     needs: [build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
+    outputs:
+      app_url: ${{env.APP_URL}}
     steps:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
@@ -61,6 +65,16 @@ jobs:
         id: get_url
         run: |
           APP_URL=$(heroku apps:info -a ${{ inputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          echo "APP_URL=$APP_URL" >> $GITHUB_ENV
           echo "----------------------------------------"
           echo "🚀 Deployment URL is $APP_URL 🚀"
           echo "----------------------------------------"
+  comment-pr:
+    needs: [deploy-application]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💬 Ephemeral Environment Link
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: "🚀 Ephemeral environment link: ${{needs.deploy-application.outputs.app_url}}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
