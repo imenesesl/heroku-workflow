@@ -1,0 +1,42 @@
+name: "Update Package Version Workflow"
+
+on:
+  workflow_call:
+    secrets:
+      GITHUB_REPO_PAT:
+        required: true
+    inputs:
+      increment_type:
+        required: true
+        type: string
+      package_json_path:
+        required: true
+        type: string
+
+jobs:
+  update-version:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'Merge pull request')
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - name: 🤖 Git config
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_REPO_PAT }}
+
+      - name: 🔃 Update Package Version
+        uses: imenesesl/heroku-workflow@main
+        with:
+          args: 'update-version'
+        env:
+          PACKAGE_JSON_PATH: ${{ inputs.package_json_path }}
+          INCREMENT_TYPE: ${{ inputs.increment_type }}
+
+      - name: 🆕 Commit and Push Version Update
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -am "bump:app-package-version"
+          git push
