@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: "imenesesl/heroku-ephemeral-environment"
+          repository: "imenesesl/heroku-workflow"
           path: "docker"
       - name: 🐳 Creating Docker Tag
         run: |
@@ -39,7 +39,7 @@ jobs:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
       - name: 🏗️ Manage Ephemeral Environment
-        uses: imenesesl/heroku-ephemeral-environment@main
+        uses: imenesesl/heroku-workflow@main
         with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
