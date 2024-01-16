@@ -1,16 +1,11 @@
 #!/bin/bash
 
-# Check if both arguments are provided
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 path/to/package.json [fix|hotfix|feature|core]"
+# Check if PACKAGE_JSON_PATH and INCREMENT_TYPE variables are set
+if [ -z "$PACKAGE_JSON_PATH" ] || [ -z "$INCREMENT_TYPE" ]; then
+    echo "Error: PACKAGE_JSON_PATH and INCREMENT_TYPE must be set."
+    echo "Usage: export PACKAGE_JSON_PATH=path/to/package.json; export INCREMENT_TYPE=[fix|hotfix|feature|core]; $0"
     exit 1
 fi
-
-# Assign the first argument as the path to package.json
-PACKAGE_JSON_PATH="$1"
-
-# Assign the second argument as the version increment type
-INCREMENT_TYPE="$2"
 
 # Get the current version from package.json
 currentVersion=$(grep '"version"' "$PACKAGE_JSON_PATH" | awk -F '"' '{print $4}')
