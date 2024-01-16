@@ -79,6 +79,6 @@ jobs:
       - name: 💬 Ephemeral Environment Link
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: "### <a href='${{ needs.deploy-application.outputs.app_url }}'' target='_blank'>🚀 Ephemeral environment link </a>"
+          message: "### <a href='${{ needs.deploy-application.outputs.app_url }}' target='_blank'>🚀 Ephemeral environment link </a>"
           GITHUB_TOKEN: ${{ secrets.GITHUB_SECRET_TOKEN }}
           pr_number: ${{ inputs.pr_number }}
