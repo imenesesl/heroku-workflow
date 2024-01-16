@@ -22,18 +22,25 @@ jobs:
           ref: main
           token: ${{ secrets.GITHUB_REPO_PAT }}
 
+      - name: 👁️ Determine Merged Branch Name
+        id: branch_name
+        run: |
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          BRANCH_NAME=$(echo "$COMMIT_MESSAGE" | sed -n 's/Merge pull request #[0-9]* from imenesesl\/\([^ ]*\).*/\1/p')
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "Extracted branch name: $BRANCH_NAME"
+
       - name: 🔎 Determine Increment Type
         id: increment_type
         run: |
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          PREFIX="${BRANCH_NAME%%/*}"
-          if [[ "$PREFIX" == "fix" ]]; then
+          BRANCH_NAME="${{ env.BRANCH_NAME }}"
+          if [[ "$BRANCH_NAME" == fix/* ]]; then
             echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
-          elif [[ "$PREFIX" == "hotfix" ]]; then
+          elif [[ "$BRANCH_NAME" == hotfix/* ]]; then
             echo "INCREMENT_TYPE=hotfix" >> $GITHUB_ENV
-          elif [[ "$PREFIX" == "feature" ]]; then
+          elif [[ "$BRANCH_NAME" == feature/* ]]; then
             echo "INCREMENT_TYPE=feature" >> $GITHUB_ENV
-          elif [[ "$PREFIX" == "core" ]]; then
+          elif [[ "$BRANCH_NAME" == core/* ]]; then
             echo "INCREMENT_TYPE=core" >> $GITHUB_ENV
           else
             echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
