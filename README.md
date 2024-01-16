@@ -188,6 +188,20 @@ jobs:
 
 7. **Add Secret**: Click the "Add secret" button to save the PAT as a secret in your repository.
 
+### Steps to to allow Read and write permissions on Workflow permissions
+
+1. **Go to Your Repository**: Navigate to the GitHub repository where you want config.
+
+2. **Open Repository Settings**: Click on the "Settings" tab near the top of the page.
+
+3. **Actions General**: In the repository settings, find and click on "Actions" and then "General" in the left sidebar.
+
+4. **Workflow permissions**: Go to "Workflow permissions" section.
+
+5. **Read and write permissions**: click on "Read and write permissions" checkbox.
+
+6. **Save**: Click the "Save" button.
+
 ### Using the PAT in GitHub Actions
 
 - In your GitHub Actions workflow file, you can now reference this secret with `${{ secrets.GITHUB_REPO_PAT }}`.
