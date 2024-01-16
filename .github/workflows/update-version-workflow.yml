@@ -34,17 +34,16 @@ jobs:
         id: increment_type
         run: |
           BRANCH_NAME="${{ env.BRANCH_NAME }}"
-          if [[ "$BRANCH_NAME" == fix/* ]]; then
-            echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
-          elif [[ "$BRANCH_NAME" == hotfix/* ]]; then
-            echo "INCREMENT_TYPE=hotfix" >> $GITHUB_ENV
-          elif [[ "$BRANCH_NAME" == feature/* ]]; then
-            echo "INCREMENT_TYPE=feature" >> $GITHUB_ENV
-          elif [[ "$BRANCH_NAME" == core/* ]]; then
-            echo "INCREMENT_TYPE=core" >> $GITHUB_ENV
-          else
-            echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
-          fi
+          PREFIX="${BRANCH_NAME%%/*}"
+          
+          case "$PREFIX" in
+            "fix"|"hotfix"|"feature"|"feat"|"core")
+              echo "INCREMENT_TYPE=$PREFIX" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "INCREMENT_TYPE=fix" >> $GITHUB_ENV
+              ;;
+          esac
 
       - name: 🔃 Update Package Version
         uses: imenesesl/heroku-workflow@main
