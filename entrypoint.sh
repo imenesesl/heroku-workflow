@@ -10,7 +10,8 @@ case "$COMMAND" in
     /app/destroy-app.sh
     ;;
   update-version)
-    /app/update-version.sh
+    PACKAGE_JSON_PATH=$2
+    /app/update-version.sh "$PACKAGE_JSON_PATH"
     ;;
   *)
     echo "Command not found: $COMMAND"
