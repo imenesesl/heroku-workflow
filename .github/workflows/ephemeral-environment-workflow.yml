@@ -1,0 +1,66 @@
+name: "Ephemeral Environment Workflow"
+on:
+  workflow_call:
+    secrets:
+      HEROKU_API_KEY:
+        required: true
+    inputs:
+      repository_owner:
+        required: true
+        type: string
+      repository_name:
+        required: true
+        type: string
+      app_name:
+        required: true
+        type: string
+      heroku_email:
+        required: true
+        type: string
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: "imenesesl/heroku-ephemeral-environment"
+          path: "docker"
+      - name: 🐳 Creating Docker Tag
+        run: |
+          IMAGE_TAG="${{ inputs.repository_owner }}/${{ inputs.repository_name }}:${{ github.sha }}"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          docker build -t $IMAGE_TAG ./docker
+  manage-ephemeral-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🏗️ Manage Ephemeral Environment
+        uses: imenesesl/heroku-ephemeral-environment@main
+        with:
+          args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
+        env:
+          APP_NAME: ${{ inputs.app_name }}
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+          HEROKU_EMAIL: ${{inputs.heroku_email}}
+  deploy-application:
+    if: ${{ github.event.action != 'closed' }}
+    needs: [build-docker-image, manage-ephemeral-environment]
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🚀 Deploy Application
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ inputs.app_name }}
+          heroku_email: ${{ inputs.heroku_email }}
+      - name: 🔗 Get Deployment URL
+        id: get_url
+        run: |
+          APP_URL=$(heroku apps:info -a ${{ inputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          echo "----------------------------------------"
+          echo "🚀 Deployment URL is $APP_URL 🚀"
+          echo "----------------------------------------"
