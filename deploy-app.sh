@@ -1,3 +1,7 @@
+echo $HEROKU_API_KEY
+echo $HEROKU_EMAIL
+echo $APP_NAME
+
 heroku login --api-key $HEROKU_API_KEY
 
 git remote add heroku https://git.heroku.com/$APP_NAME.git
