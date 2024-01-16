@@ -19,6 +19,9 @@ on:
       heroku_email:
         required: true
         type: string
+      pr_number:
+        required: true
+        type: number
 
 jobs:
   build-docker-image:
@@ -74,7 +77,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 💬 Ephemeral Environment Link
-        uses: thollander/actions-comment-pull-request@v1
+        uses: thollander/actions-comment-pull-request@v2
         with:
           message: "🚀 Ephemeral environment link: ${{ needs.deploy-application.outputs.app_url }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_SECRET_TOKEN }}
+          pr_number: ${{ inputs.pr_number }}
