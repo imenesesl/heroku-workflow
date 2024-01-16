@@ -28,7 +28,7 @@ jobs:
       - name: 🔃 Update Package Version
         uses: imenesesl/heroku-workflow@main
         with:
-          args: 'update-version'
+          args: "update-version"
         env:
           PACKAGE_JSON_PATH: ${{ inputs.package_json_path }}
           INCREMENT_TYPE: ${{ inputs.increment_type }}
