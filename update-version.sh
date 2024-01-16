@@ -1,13 +1,16 @@
 #!/bin/bash
 
-# Check if the path to package.json is provided as an argument
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 path/to/package.json"
+# Check if both arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 path/to/package.json [fix|hotfix|feature|core]"
     exit 1
 fi
 
 # Assign the first argument as the path to package.json
 PACKAGE_JSON_PATH="$1"
+
+# Assign the second argument as the version increment type
+INCREMENT_TYPE="$2"
 
 # Get the current version from package.json
 currentVersion=$(grep '"version"' "$PACKAGE_JSON_PATH" | awk -F '"' '{print $4}')
@@ -20,12 +23,12 @@ patch=${VERSION[2]}
 
 # Function to increment version
 increment_version() {
-    if [[ $1 == "patch" ]]; then
+    if [[ $1 == "fix" || $1 == "hotfix" ]]; then
         patch=$((patch+1))
-    elif [[ $1 == "minor" ]]; then
+    elif [[ $1 == "feature" ]]; then
         minor=$((minor+1))
         patch=0
-    elif [[ $1 == "major" ]]; then
+    elif [[ $1 == "core" ]]; then
         major=$((major+1))
         minor=0
         patch=0
@@ -34,27 +37,10 @@ increment_version() {
     echo "${major}.${minor}.${patch}"
 }
 
-# Menu to select the type of increment
-echo "Select the type of increment:"
-select option in "fix - hotfix" "feature" "core"; do
-    case $option in
-        "fix - hotfix")
-            newVersion=$(increment_version patch)
-            break
-            ;;
-        "feature")
-            newVersion=$(increment_version minor)
-            break
-            ;;
-        "core")
-            newVersion=$(increment_version major)
-            break
-            ;;
-        *) echo "Invalid option";;
-    esac
-done
+# Increment the version based on the type
+newVersion=$(increment_version "$INCREMENT_TYPE")
 
 # Update the package.json file
-sed -i '' -e "s/\"version\": \"$currentVersion\"/\"version\": \"$newVersion\"/" "$PACKAGE_JSON_PATH"
+sed -i -e "s/\"version\": \"$currentVersion\"/\"version\": \"$newVersion\"/" "$PACKAGE_JSON_PATH"
 
 echo "Version updated to $newVersion"
