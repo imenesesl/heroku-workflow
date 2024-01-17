@@ -34,7 +34,8 @@ jobs:
         id: increment_type
         run: |
           BRANCH_NAME="${{ env.BRANCH_NAME }}"
-          PREFIX="${BRANCH_NAME%%/*}"
+          BRANCH_NAME_MODIFIED="${BRANCH_NAME//-//}"
+          PREFIX="${BRANCH_NAME_MODIFIED%%/*}"
           
           case "$PREFIX" in
             "fix"|"hotfix"|"feature"|"feat"|"core")
